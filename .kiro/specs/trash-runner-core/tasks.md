@@ -1,0 +1,177 @@
+# Implementation Plan
+
+- [x] 1. Set up project structure and data layer
+  - [x] 1.1 Create folder structure and namespace files
+    - Create `Assets/Scripts/Core/`, `Assets/Scripts/Player/`, `Assets/Scripts/Environment/`, `Assets/Scripts/UI/`, `Assets/Scripts/Data/` directories
+    - Create `Assets/Data/` for ScriptableObject assets
+    - Create `Assets/Input/` for input action asset
+    - _Requirements: 11.1, 11.2, 11.3_
+  - [x] 1.2 Implement DifficultyConfig ScriptableObject
+    - Create `DifficultyConfig.cs` in TrashRunner.Data namespace
+    - Add AnimationCurve fields: speedOverTime, obstacleDensityOverTime, pickupDensityOverTime
+    - Add CreateAssetMenu attribute with menuName "TrashRunner/DifficultyConfig"
+    - _Requirements: 11.1, 6.2, 6.3, 6.4_
+  - [x] 1.3 Implement SpawnConfig ScriptableObject
+    - Create `SpawnConfig.cs` in TrashRunner.Data namespace
+    - Define ObstacleSpawnEntry and PickupSpawnEntry serializable classes
+    - Add lists for obstacle and pickup entries with prefab, probability, minDistance fields
+    - Add CreateAssetMenu attribute with menuName "TrashRunner/SpawnConfig"
+    - _Requirements: 11.2, 5.5_
+
+- [x] 2. Implement core managers
+  - [x] 2.1 Implement GameManager
+    - Create `GameManager.cs` in TrashRunner.Core namespace
+    - Define RunState enum (Menu, Running, Paused, GameOver)
+    - Implement events: OnRunStarted, OnRunEnded, OnPause, OnResume
+    - Add SerializeField references for ScoreManager, DifficultyController, SegmentSpawner, PlayerRunnerController
+    - Implement StartRun() with 9-step reset sequence
+    - Implement EndRun(), PauseGame(), ResumeGame() methods
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 2.2 Implement ScoreManager
+    - Create `ScoreManager.cs` in TrashRunner.Core namespace
+    - Implement events: OnCoinsChanged, OnTrashChanged, OnLivesChanged, OnDistanceChanged, OnScoreChanged
+    - Add SerializeField fields: scorePerMeter, scorePerCoin, scorePerTrash, initialLives
+    - Implement properties: Coins, Trash, Lives, Distance, Score, BestScore
+    - Implement ResetStats(), AddDistance(), AddCoin(), AddTrash(), LoseLife() methods
+    - Add PlayerPrefs persistence for BestScore with key "TrashRunner_BestScore"
+    - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
+  - [x] 2.3 Implement DifficultyController
+    - Create `DifficultyController.cs` in TrashRunner.Core namespace
+    - Add SerializeField reference to DifficultyConfig
+    - Track elapsedRunTime, increment in Update when Running
+    - Implement GetCurrentSpeed(), GetObstacleDensity(), GetPickupDensity() using AnimationCurve.Evaluate()
+    - Implement ResetTime() to set elapsedRunTime to 0
+    - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
+  - [x] 2.4 Implement AudioManager
+    - Create `AudioManager.cs` in TrashRunner.Core namespace
+    - Add two AudioSource fields: musicSource, sfxSource
+    - Add AudioClip fields: jumpClip, slideClip, coinClip, trashClip, hitObstacleClip, buttonClickClip, musicClip
+    - Add bool fields: muteSFX, muteMusic
+    - Implement PlayJump(), PlaySlide(), PlayPickupCoin(), PlayPickupTrash(), PlayHitObstacle(), PlayButtonClick()
+    - Implement StartMusic(), StopMusic() for background music
+    - _Requirements: 10.1, 10.2, 10.3, 10.4_
+
+- [ ] 3. Implement player systems
+  - [ ] 3.1 Implement PlayerInputController
+    - Create `PlayerInputController.cs` in TrashRunner.Player namespace
+    - Define events: OnMoveLeft, OnMoveRight, OnJump, OnSlide
+    - Add SerializeField for InputActionAsset runnerInputAsset
+    - Add swipe settings: minSwipeDistance, maxSwipeTime, directionThreshold
+    - In Awake: get Gameplay action map, retrieve actions by name
+    - In OnEnable: subscribe to action.performed callbacks, enable action map
+    - In OnDisable: unsubscribe and disable action map
+    - Implement touch swipe detection for mobile input
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
+  - [ ] 3.2 Implement PlayerRunnerController
+    - Create `PlayerRunnerController.cs` in TrashRunner.Player namespace
+    - Add SerializeField fields: baseForwardSpeed, laneWidth, laneChangeSpeed, jumpForce, gravity, slideDuration
+    - Add SerializeField references: CharacterController, ScoreManager, GameManager, DifficultyController, PlayerInputController, AudioManager
+    - Store originalHeight and originalCenter in Awake for slide restoration
+    - Track currentLaneIndex (0-2), verticalVelocity, isSliding, slideTimer, cumulativeDistance
+    - Subscribe to input events in OnEnable, unsubscribe in OnDisable
+    - Implement Update: forward movement, lane lerping, gravity, slide timer, CharacterController.Move()
+    - Implement distance tracking: report to ScoreManager when delta >= 0.5m
+    - Implement ResetToStart() and SetLane() methods
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
+  - [ ] 3.3 Implement PlayerCollisionHandler
+    - Create `PlayerCollisionHandler.cs` in TrashRunner.Player namespace
+    - Add SerializeField references: PlayerRunnerController, ScoreManager
+    - Implement OnTriggerEnter: check for Obstacle component, call ApplyEffect
+    - Implement OnTriggerEnter: check for Pickup component, call ApplyEffect
+    - _Requirements: 7.1, 7.2_
+  - [ ] 3.4 Implement RunnerCameraController
+    - Create `RunnerCameraController.cs` in TrashRunner.Player namespace
+    - Add SerializeField fields: playerTransform, offset, smoothSpeed, useSpeedBasedFOV, baseFOV, maxFOV, maxSpeedForFOV
+    - Cache Camera component in Awake
+    - Implement LateUpdate: calculate target position, Lerp/SmoothDamp to follow
+    - Implement optional FOV adjustment based on speed
+    - _Requirements: 8.1, 8.2, 8.3_
+
+- [ ] 4. Implement environment systems
+  - [ ] 4.1 Implement TrackSegment
+    - Create `TrackSegment.cs` in TrashRunner.Environment namespace
+    - Add SerializeField: length (default 10f), laneSpawnPoints array (3 transforms)
+    - Expose Length property (read-only)
+    - Track spawnedObjects list for recycling
+    - Implement ClearSpawnedObjects() and AddSpawnedObject() methods
+    - _Requirements: 5.4_
+  - [ ] 4.2 Implement Obstacle
+    - Create `Obstacle.cs` in TrashRunner.Environment namespace
+    - Add SerializeField reference to AudioManager
+    - Track effectApplied bool to prevent double-hits
+    - Implement ApplyEffect(PlayerRunnerController, ScoreManager): call scoreManager.LoseLife(), play sound, deactivate
+    - Implement ResetObstacle() for pool recycling
+    - _Requirements: 7.3, 7.5_
+  - [ ] 4.3 Implement Pickup
+    - Create `Pickup.cs` in TrashRunner.Environment namespace
+    - Define PickupType enum (Coin, Trash)
+    - Add SerializeField: pickupType, AudioManager reference
+    - Track effectApplied bool
+    - Implement ApplyEffect: call AddCoin() or AddTrash() based on type, play sound, deactivate
+    - Implement ResetPickup() for pool recycling
+    - _Requirements: 7.4, 7.5_
+  - [ ] 4.4 Implement SegmentSpawner
+    - Create `SegmentSpawner.cs` in TrashRunner.Environment namespace
+    - Add SerializeField: initialSegmentCount, segmentsAhead, segmentParent, segmentPrefab, SpawnConfig, DifficultyController
+    - Implement object pools: Queue<TrackSegment> for segments, Dictionary<GameObject, Queue<GameObject>> for obstacles/pickups
+    - Pre-initialize pools in Awake/Start
+    - Implement GetFromPool() and ReturnToPool() helper methods
+    - Track activeSegments list and nextSpawnZ position
+    - Implement Update: check player position, spawn new segments ahead, recycle old segments
+    - Implement ResetTrack(): deactivate all segments/objects, reset pools, spawn initial segments
+    - Implement PopulateSegment(): query DifficultyController for densities, use SpawnConfig for spawn decisions
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
+
+- [ ] 5. Implement UI systems
+  - [ ] 5.1 Implement HUDController
+    - Create `HUDController.cs` in TrashRunner.UI namespace
+    - Add SerializeField references: TextMeshProUGUI for distance, score, coins, trash, lives
+    - Add SerializeField reference to ScoreManager
+    - Subscribe to OnDistanceChanged, OnScoreChanged, OnCoinsChanged, OnTrashChanged, OnLivesChanged in OnEnable
+    - Unsubscribe in OnDisable
+    - Implement handler methods to update UI text
+    - _Requirements: 9.2, 9.5_
+  - [ ] 5.2 Implement MainMenuUI
+    - Create `MainMenuUI.cs` in TrashRunner.UI namespace
+    - Add SerializeField references: playButton, bestScoreText
+    - Add SerializeField references: GameManager, ScoreManager
+    - Wire playButton onClick to GameManager.StartRun()
+    - Display best score from ScoreManager.BestScore
+    - _Requirements: 9.1_
+  - [ ] 5.3 Implement PauseMenuUI
+    - Create `PauseMenuUI.cs` in TrashRunner.UI namespace
+    - Add SerializeField references: resumeButton, mainMenuButton
+    - Add SerializeField reference to GameManager
+    - Wire resumeButton onClick to GameManager.ResumeGame()
+    - Wire mainMenuButton to transition to Menu state
+    - Subscribe to OnPause/OnResume in OnEnable to show/hide panel
+    - _Requirements: 9.3_
+  - [ ] 5.4 Implement GameOverUI
+    - Create `GameOverUI.cs` in TrashRunner.UI namespace
+    - Add SerializeField references: finalScoreText, finalDistanceText, finalCoinsText, finalTrashText, retryButton, mainMenuButton
+    - Add SerializeField references: GameManager, ScoreManager
+    - Subscribe to OnRunEnded in OnEnable to activate and populate stats
+    - Wire retryButton onClick to GameManager.StartRun()
+    - Wire mainMenuButton to transition to Menu state
+    - _Requirements: 9.4, 9.5_
+
+- [ ] 6. Create Input Action Asset
+  - [ ] 6.1 Create RunnerInput.inputactions
+    - Create input action asset at Assets/Input/RunnerInput.inputactions
+    - Create Gameplay action map
+    - Add MoveLeft action (Button): bind to Keyboard/a, Keyboard/leftArrow
+    - Add MoveRight action (Button): bind to Keyboard/d, Keyboard/rightArrow
+    - Add Jump action (Button): bind to Keyboard/space
+    - Add Slide action (Button): bind to Keyboard/s, Keyboard/leftCtrl
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.6_
+
+- [ ] 7. Wire up scene and prefabs
+  - [ ] 7.1 Document Unity scene setup
+    - Create setup instructions for MainScene with all manager GameObjects
+    - Document TruckPlayer prefab setup: CharacterController, PlayerRunnerController, PlayerInputController, PlayerCollisionHandler
+    - Document TrackSegment prefab setup: TrackSegment component, spawn point transforms, end trigger
+    - Document Obstacle prefab setup: trigger collider, kinematic Rigidbody, Obstacle component
+    - Document Pickup prefab setup: trigger collider, kinematic Rigidbody, Pickup component
+    - Document UI Canvas setup: HUD, MainMenu, PauseMenu, GameOver panels
+    - Document physics layer setup: Player(6), Obstacle(7), Pickup(8), Track(9)
+    - _Requirements: 7.5, All wiring requirements_

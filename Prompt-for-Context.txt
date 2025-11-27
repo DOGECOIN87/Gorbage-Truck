@@ -1,0 +1,732 @@
+# TrashRunner Endless Runner – One-Shot Code Generation Prompt (Optimized)
+
+## 1. TASK & ROLE DEFINITION
+
+You are an expert Unity game developer and technical designer integrated in the Unity IDE. Your task is to generate all the core C# scripts for **TrashRunner**, a complete endless runner game. 
+
+**Deliverable**: Production-ready C# scripts that can be pasted into a fresh Unity project (LTS, URP, C#) to create a playable prototype with minimal additional setup.
+
+**Game Concept Summary**: 
+- 3D endless runner with a garbage truck collecting trash on city streets
+- Lane-based gameplay (3 lanes: left, center, right)
+- Player controls: lane switching, jumping, sliding
+- Collect trash/coins, avoid obstacles
+- Difficulty scales over time (speed, spawn density)
+- Run continues until player loses all lives
+
+---
+
+## 2. BACKGROUND CONTEXT
+
+### Technology Stack
+- **Engine**: Unity 2022.3 LTS or newer (tested up to Unity 6 LTS)
+- **Rendering**: URP 14.x+ (Universal Render Pipeline)
+- **Language**: C#
+- **Input**: Unity New Input System (NOT legacy Input Manager)
+  - Package Version: 1.7.0+
+  - Project Settings → Active Input Handling set to "Both" or "Input System Package (New)"
+- **Platform**: Mobile (Android & iOS) with touch controls, plus keyboard for editor testing
+
+### Tested Compatibility Matrix
+| Unity Version | URP Version | Input System Package |
+|---------------|-------------|---------------------|
+| 2022.3 LTS    | 14.0.x      | 1.7.0               |
+| 2023.2+       | 16.0.x+     | 1.7.0+              |
+| Unity 6 LTS   | 17.0.x+     | 1.8.0+              |
+
+### Core Gameplay Loop
+1. **Automatic Forward Movement**: Truck moves forward constantly (+Z axis)
+2. **Lane-Based Navigation**: Player switches between 3 discrete lanes
+3. **Actions**: 
+   - Lane change (swipe left/right or A/D keys)
+   - Jump over obstacles (swipe up or Space)
+   - Slide under obstacles (swipe down or S/Ctrl)
+4. **Collectibles**:
+   - Trash pickups (primary objective)
+   - Coin pickups (secondary collectible)
+5. **Obstacles**: Static barriers, cones, junk piles (later: moving obstacles)
+6. **Difficulty Scaling**:
+   - Forward speed increases over time
+   - Obstacle spawn density increases
+   - Pickup density may taper to maintain challenge
+7. **Fail Condition**: Player loses all lives by hitting obstacles
+8. **Scoring**:
+   - Base score from distance traveled
+   - Additional points from trash/coin collection
+   - Track: distance, coins, trash, lives, best score (persistent via PlayerPrefs)
+
+### World & Lanes
+- **Perspective**: Third-person camera following behind truck
+- **Lane System**:
+  - Lane 0 (Left) = x: `-laneWidth`
+  - Lane 1 (Center) = x: `0`
+  - Lane 2 (Right) = x: `+laneWidth`
+  - `laneWidth` is configurable via `[SerializeField]`
+- **Track**: Repeating segments (~10m straight pieces) with spawn points for obstacles/pickups
+
+### Project Asset Organization
+Assume the following folder structure (use these paths consistently):
+
+```
+Assets/
+├── Models/
+│   ├── Truck/
+│   │   └── Garbage Truck.fbx
+│   ├── Environment/
+│   │   └── segment_straight_10m.fbx
+│   ├── Obstacles/ (barrier, cone models)
+│   └── Pickups/ (trash bag, coin models)
+├── Textures/
+├── UI/ (UI sprites)
+├── Audio/ (SFX and music clips)
+├── Data/ (ScriptableObject assets)
+├── Input/
+│   └── RunnerInput.inputactions
+├── Prefabs/
+│   ├── Player/
+│   │   └── TruckPlayer.prefab
+│   ├── Environment/
+│   │   └── TrackSegment.prefab
+│   ├── Obstacles/ (obstacle prefabs)
+│   ├── Pickups/ (pickup prefabs)
+│   └── UI/ (HUD, menus)
+└── Scripts/
+    ├── Core/
+    ├── Player/
+    ├── Environment/
+    ├── UI/
+    └── Data/
+```
+
+**Key Assumptions**:
+- Player truck: `Assets/Models/Truck/Garbage Truck.fbx`
+- Track segment: `Assets/Models/Environment/segment_straight_10m.fbx`
+- All prefab/asset references assigned via Unity Inspector (NOT loaded by path at runtime)
+- If assets are missing, document required setup in comments/wiring instructions
+
+---
+
+## 3. CRITICAL INSTRUCTIONS & CONSTRAINTS
+
+### A. CODE REQUIREMENTS (MANDATORY)
+
+**🚨 HARD LINE LIMIT**: Each C# script file MUST be ≤450 lines (including usings, namespace, comments, blank lines, braces). This is NON-NEGOTIABLE to prevent response truncation.
+
+**If a script approaches 450 lines, apply splitting strategies**:
+1. **Collision handling** → separate `PlayerCollisionHandler.cs`
+2. **State management** → separate `PlayerMovementState.cs`
+3. **Object pooling** → separate `ObstaclePoolManager.cs`, `PickupPoolManager.cs`
+4. **Input swipe detection** → separate helper class if needed
+5. **UI panels** → each panel (HUD, Pause, GameOver) in separate scripts
+
+**Code Style**:
+- Clean, production-ready, single-responsibility classes
+- Clear namespaces: `TrashRunner.Core`, `.Player`, `.Environment`, `.UI`, `.Data`
+- Use `[SerializeField]` for tunable fields with concise comments
+- NO placeholders, pseudocode, `// TODO`, or `...` incomplete methods
+- All code must compile without errors in fresh Unity project
+
+**Performance**:
+- Use object pooling for segments, obstacles, pickups
+- Avoid allocations in `Update()`
+- Update UI text on value change, not every frame
+
+### B. PHYSICS & COLLISION RULES (MANDATORY)
+
+**Player Movement**:
+- Uses `CharacterController` component (NO Rigidbody on player)
+- Movement via `CharacterController.Move()` in `Update` (or `FixedUpdate`, use one consistently)
+- Handle gravity and vertical motion manually (CharacterController doesn't apply physics)
+
+**Obstacles & Pickups**:
+- All have colliders with `Is Trigger = true`
+- All have kinematic Rigidbody (`isKinematic = true`, `useGravity = false`) to ensure triggers fire with CharacterController
+- Identify via component scripts (`Obstacle`, `Pickup`), not just tags/names
+- Tags/layers optional for organization, but use component presence for core logic
+
+**Sliding Implementation**:
+- Store original CharacterController `height` and `center` in `Awake`
+- On slide start: set `height` to ~50% of original, adjust `center.y = originalCenter.y - ((originalHeight - newHeight) / 2)`
+- On slide end: restore original `height` and `center`
+- Apply changes in same frame (not gradually) to avoid physics anomalies
+
+**Physics Layer Setup (Recommended)**:
+- Create layers: `Player` (6), `Obstacle` (7), `Pickup` (8), `Track` (9)
+- Collision matrix: Player collides with Obstacle/Pickup only
+- Obstacles/Pickups don't collide with each other
+- Assign prefabs to correct layers
+
+### C. INPUT SYSTEM SETUP (MANDATORY)
+
+**Input Asset Structure**:
+- Location: `Assets/Input/RunnerInput.inputactions`
+- Action Map: `Gameplay`
+- Actions (all type Button):
+  - `MoveLeft` → Bindings: `<Keyboard>/a`, `<Keyboard>/leftArrow`
+  - `MoveRight` → Bindings: `<Keyboard>/d`, `<Keyboard>/rightArrow`
+  - `Jump` → Bindings: `<Keyboard>/space`
+  - `Slide` → Bindings: `<Keyboard>/s`, `<Keyboard>/leftCtrl`
+
+**Mobile Swipe Detection** (in `PlayerInputController`):
+```csharp
+[SerializeField] private float minSwipeDistance = 50f; // pixels
+[SerializeField] private float maxSwipeTime = 0.5f; // seconds
+[SerializeField] private float directionThreshold = 0.5f; // axis ratio
+```
+
+**Swipe Logic**:
+- Touch began: record start position/time
+- Touch ended: compute delta and duration
+- If `magnitude > minSwipeDistance` and `duration < maxSwipeTime`:
+  - Check `abs(primaryAxis) / abs(secondaryAxis) > directionThreshold`
+  - Trigger corresponding action event
+
+**Implementation Rules**:
+- `PlayerInputController` manages all input (namespace: `TrashRunner.Player`)
+- Has `[SerializeField] private InputActionAsset runnerInputAsset;` (assign in Inspector, NO runtime loading)
+- In `Awake`/`OnEnable`: retrieve `Gameplay` map, enable it, get actions by name
+- Subscribe to action callbacks, raise C# events: `OnMoveLeft`, `OnMoveRight`, `OnJump`, `OnSlide`
+- `PlayerRunnerController` subscribes to these events (never reads input directly)
+- Do NOT use Unity's auto-generated C# classes for input actions
+
+### D. SCRIPTABLEOBJECT CONFIGS (MANDATORY)
+
+#### DifficultyConfig
+```csharp
+namespace TrashRunner.Data;
+[CreateAssetMenu(menuName = "TrashRunner/DifficultyConfig")]
+public class DifficultyConfig : ScriptableObject
+{
+    public AnimationCurve speedOverTime; // X: elapsed run time (sec), Y: speed
+    public AnimationCurve obstacleDensityOverTime; // X: time, Y: density
+    public AnimationCurve pickupDensityOverTime; // X: time, Y: density
+}
+```
+- Asset Path: `Assets/Data/DifficultyConfig.asset`
+- `DifficultyController` evaluates curves at `elapsedRunTime` (NOT distance)
+- Reset `elapsedRunTime` to 0 on each run start
+
+#### SpawnConfig
+```csharp
+namespace TrashRunner.Data;
+[CreateAssetMenu(menuName = "TrashRunner/SpawnConfig")]
+public class SpawnConfig : ScriptableObject
+{
+    [System.Serializable]
+    public class ObstacleSpawnEntry {
+        public GameObject prefab;
+        public float spawnProbability;
+        public float minDistanceBetweenSpawns;
+    }
+    [System.Serializable]
+    public class PickupSpawnEntry {
+        public GameObject prefab;
+        public float spawnProbability;
+        public float minDistanceBetweenSpawns;
+    }
+    
+    public List<ObstacleSpawnEntry> obstacleEntries;
+    public List<PickupSpawnEntry> pickupEntries;
+}
+```
+- Asset Path: `Assets/Data/SpawnConfig.asset`
+- `SegmentSpawner` uses this to decide what/where to spawn
+- Create in Unity Editor, assign via Inspector (NO runtime Resources.Load)
+
+### E. NAMESPACES & CORE SCRIPT LIST
+
+**Namespaces**:
+- `TrashRunner.Core`
+- `TrashRunner.Player`
+- `TrashRunner.Environment`
+- `TrashRunner.UI`
+- `TrashRunner.Data`
+
+**Minimum Required Scripts**:
+
+**TrashRunner.Core**:
+- `GameManager` (game state, run start/end/pause)
+- `ScoreManager` (score, distance, coins, trash, lives, best score)
+- `DifficultyController` (difficulty curves using DifficultyConfig)
+- `AudioManager` (SFX/music management)
+
+**TrashRunner.Player**:
+- `PlayerRunnerController` (movement, jumping, sliding, lane switching)
+- `PlayerInputController` (input handling, raises events)
+- `RunnerCameraController` (camera follow)
+- Optional helpers: `PlayerCollisionHandler`, `PlayerMovementState`
+
+**TrashRunner.Environment**:
+- `TrackSegment` (component for track prefabs, spawn points, length)
+- `SegmentSpawner` (infinite track generation, pooling)
+- `Obstacle` (obstacle behavior on collision)
+- `Pickup` (pickup behavior on collection)
+- Optional: `ObstaclePoolManager`, `PickupPoolManager`
+
+**TrashRunner.UI**:
+- `HUDController` (in-game UI updates)
+- `MainMenuUI` (main menu logic)
+- `PauseMenuUI` (pause menu logic)
+- `GameOverUI` (game over screen logic)
+
+**TrashRunner.Data**:
+- `DifficultyConfig` (ScriptableObject)
+- `SpawnConfig` (ScriptableObject)
+
+**Helper Types**: Small enums (Lane, RunState, PickupType) can be defined in existing files or separate files. Include proper `using TrashRunner.X;` directives.
+
+### F. EVENT SIGNATURES & INTERACTIONS (FIXED NAMES)
+
+Use these EXACT event names and signatures (do NOT rename):
+
+#### GameManager (TrashRunner.Core)
+```csharp
+public event System.Action OnRunStarted;
+public event System.Action OnRunEnded;
+public event System.Action OnPause;
+public event System.Action OnResume;
+
+public void StartRun();
+public void EndRun();
+public void PauseGame();
+public void ResumeGame();
+```
+
+**Responsibilities**:
+- Manages RunState enum: `{ Menu, Running, Paused, GameOver }`
+- Coordinates state transitions, invokes events
+- Other systems call these methods (don't invoke events directly)
+
+**StartRun() Sequence**:
+1. Reset player position to start (center lane)
+2. Call `SegmentSpawner.ResetTrack()`
+3. Call `ScoreManager.ResetStats()`
+4. Call `DifficultyController.ResetTime()`
+5. Ensure player GameObject active/enabled
+6. Reset player lane to center (index 1)
+7. Return all pooled objects to inactive state
+8. Set RunState to `Running`
+9. Invoke `OnRunStarted` event
+
+#### ScoreManager (TrashRunner.Core)
+```csharp
+public event System.Action<int> OnCoinsChanged;
+public event System.Action<int> OnTrashChanged;
+public event System.Action<int> OnLivesChanged;
+public event System.Action<float> OnDistanceChanged;
+public event System.Action<int> OnScoreChanged;
+```
+
+**Responsibilities**:
+- Track: Coins, Trash, Lives, Distance (float), Score, BestScore
+- Expose tunable scoring via `[SerializeField]`:
+  - `scorePerMeter`
+  - `scorePerCoin`
+  - `scorePerTrash`
+- Persist BestScore via PlayerPrefs
+- PlayerPrefs key: `private const string BEST_SCORE_KEY = "TrashRunner_BestScore";`
+- On run end, if `Score > BestScore`: update and save immediately
+
+**Distance Tracking (Canonical)**:
+- ONLY `PlayerRunnerController` computes distance
+- Keep `float cumulativeDistance` in PlayerRunnerController
+- Each frame: `distanceDelta = currentSpeed * Time.deltaTime; cumulativeDistance += distanceDelta;`
+- When `cumulativeDistance - lastReportedDistance >= 0.5f`: call `scoreManager.AddDistance(delta)` and raise `OnDistanceChanged`
+- Reset `cumulativeDistance` to 0 on `OnRunStarted`
+
+**Player Interactions**:
+- `OnObstacleHit()`: decrement Lives, raise `OnLivesChanged`, if Lives <= 0 call `GameManager.EndRun()`
+- `OnPickupCollected(PickupType type)`: increment Coins/Trash, add to Score, raise events
+
+#### PlayerInputController (TrashRunner.Player)
+```csharp
+public event System.Action OnMoveLeft;
+public event System.Action OnMoveRight;
+public event System.Action OnJump;
+public event System.Action OnSlide;
+```
+- Raises events in response to input (keyboard/touch)
+- `PlayerRunnerController` subscribes (never reads input directly)
+
+#### Obstacle & Pickup (TrashRunner.Environment)
+```csharp
+public void ApplyEffect(PlayerRunnerController player, ScoreManager scoreManager)
+```
+- Called when player collides with obstacle/pickup
+- Check `player` and `scoreManager` are not null
+- Apply effect once (use flag or disable immediately)
+- After effect, deactivate and return to pool
+
+**Examples**:
+- Obstacle: reduce life, play hit sound, disable
+- Pickup: increment coin/trash, play collect sound, disable
+
+### G. UI SCRIPTS EVENT HANDLING (MANDATORY PATTERN)
+
+All UI scripts MUST follow this pattern:
+```csharp
+private void OnEnable() {
+    if (scoreManager != null) {
+        scoreManager.OnScoreChanged += HandleScoreChanged;
+    }
+    // subscribe to other events
+}
+
+private void OnDisable() {
+    if (scoreManager != null) {
+        scoreManager.OnScoreChanged -= HandleScoreChanged;
+    }
+    // unsubscribe from all events
+}
+
+private void HandleScoreChanged(int newScore) {
+    // update UI
+}
+```
+
+**Rules**:
+- Subscribe in `OnEnable` ONLY (not Start/Awake)
+- Unsubscribe in `OnDisable` (prevents memory leaks)
+- UI objects may be inactive until needed
+
+**HUDController**:
+- Subscribes to: `OnDistanceChanged`, `OnScoreChanged`, `OnCoinsChanged`, `OnTrashChanged`, `OnLivesChanged`
+- Updates corresponding UI elements
+
+**MainMenuUI**:
+- Active in Menu state
+- "Play" button → `GameManager.StartRun()`
+- Display best score (from ScoreManager or PlayerPrefs)
+
+**PauseMenuUI**:
+- Shown when paused
+- "Resume" → `GameManager.ResumeGame()`
+- "Main Menu" → transition to Menu state
+
+**GameOverUI**:
+- Shown when run ends (RunState.GameOver)
+- Display final stats: score, distance, coins, trash
+- "Retry" → `GameManager.StartRun()`
+- "Main Menu" → transition to Menu state
+- Subscribe to `OnRunEnded` to activate/update stats
+
+### H. AUDIO MANAGER
+
+**AudioManager (TrashRunner.Core)**:
+- Simple centralized audio management
+- Two AudioSource components:
+  - One for background music (looping)
+  - One for SFX (PlayOneShot for overlapping sounds)
+- Methods:
+  - `PlayJump()`, `PlaySlide()`, `PlayPickupCoin()`, `PlayPickupTrash()`, `PlayHitObstacle()`, `PlayButtonClick()`
+- Toggles: `[SerializeField] bool muteSFX;`, `[SerializeField] bool muteMusic;`
+- Clips: `[SerializeField] AudioClip jumpClip, slideClip, coinClip, trashClip, hitObstacleClip, buttonClickClip, musicClip;`
+- Attach to persistent GameObject (same as GameManager or separate)
+
+---
+
+## 4. DETAILED SPECIFICATIONS
+
+### Player Movement & States
+
+**PlayerRunnerController (TrashRunner.Player)**:
+
+**Responsibilities**:
+- Forward movement (+Z) using CharacterController
+- Lane changes (lerp to target X position)
+- Vertical movement (jumping, gravity)
+- Sliding (adjust CharacterController height/center)
+- Collision detection (OnTriggerEnter or via separate handler)
+- Report distance to ScoreManager
+- Notify GameManager when lives reach 0
+
+**Key Fields**:
+```csharp
+[SerializeField] float baseForwardSpeed;
+[SerializeField] float laneWidth;
+[SerializeField] float laneChangeSpeed;
+[SerializeField] float jumpForce;
+[SerializeField] float gravity;
+[SerializeField] float slideDuration;
+[SerializeField] CharacterController characterController;
+[SerializeField] ScoreManager scoreManager;
+[SerializeField] GameManager gameManager;
+[SerializeField] AudioManager audioManager; // optional
+```
+
+**Lane Handling**:
+- `int currentLaneIndex` (0=left, 1=center, 2=right), init to 1
+- Target X position: `(currentLaneIndex - 1) * laneWidth`
+- On `OnMoveLeft`: `currentLaneIndex = Mathf.Max(0, currentLaneIndex - 1)`
+- On `OnMoveRight`: `currentLaneIndex = Mathf.Min(2, currentLaneIndex + 1)`
+- Lerp/move toward target X while continuing forward
+
+**Jump & Slide**:
+- Jump: if grounded and not sliding, apply `jumpForce` upward velocity
+- Slide: if grounded and not jumping, start timer for `slideDuration`, adjust CharacterController height/center immediately
+- Disallow jump+slide simultaneously
+- Restore original height/center after slide duration
+
+**Collision Handling**:
+- `OnTriggerEnter(Collider other)` in PlayerRunnerController or separate `PlayerCollisionHandler`
+- Check for `Obstacle` component: `other.GetComponent<Obstacle>()?.ApplyEffect(this, scoreManager);`
+- Check for `Pickup` component: `other.GetComponent<Pickup>()?.ApplyEffect(this, scoreManager);`
+- Play feedback sounds via AudioManager
+
+### Camera Behavior
+
+**RunnerCameraController (TrashRunner.Player)**:
+- Follow camera behind/above player
+- Parameters:
+  - `Vector3 offset` (e.g., `(0, 5, -10)`)
+  - Follow smoothing (Lerp or SmoothDamp)
+  - Optional: adjust FOV based on speed
+- In `LateUpdate()`: compute target position (`playerTransform.position + offset`), smoothly move camera
+- Optional: `camera.fieldOfView = Mathf.Lerp(baseFOV, maxFOV, currentSpeed / maxSpeed);`
+
+### Track & Spawning Details
+
+**TrackSegment (TrashRunner.Environment)**:
+- Component on track segment prefabs
+- Child transforms for spawn positions (3 lane positions per segment)
+- Trigger collider at end of segment (detect when player passes)
+- `[SerializeField] private float length = 10f;`
+- `public float Length => length;` (property for SegmentSpawner to read)
+- All track placement uses `Length` property (NO hard-coded distances)
+
+**SegmentSpawner (TrashRunner.Environment)**:
+- Maintains object pools: segments, obstacles, pickups
+- Keep `segmentsAhead` number of segments spawned ahead of player
+- When player passes end trigger:
+  1. Recycle oldest segment (return to pool)
+  2. Get pooled segment (or instantiate if needed)
+  3. Position: `newSegment.position.z = lastSegment.position.z + lastSegment.Length`
+  4. Populate with obstacles/pickups per DifficultyConfig + SpawnConfig
+
+**Tunable Fields**:
+```csharp
+[SerializeField] int initialSegmentCount; // starting segments
+[SerializeField] int segmentsAhead; // keep ahead of player
+[SerializeField] Transform segmentParent; // hierarchy organization
+[SerializeField] TrackSegment segmentPrefab;
+[SerializeField] SpawnConfig spawnConfig;
+[SerializeField] DifficultyConfig difficultyConfig;
+```
+
+**Pool Initialization** (Awake/Start):
+- Pre-create pools:
+  - Segments: `initialSegmentCount + segmentsAhead`
+  - Obstacles: `segmentsAhead * 3 lanes * avg per segment` per type
+  - Pickups: similar estimate per type
+- Store: `Dictionary<GameObject, Queue<GameObject>>`
+- All pooled instances `SetActive(false)` until needed
+
+**Object Pooling**:
+- Check pool first, reuse if available; instantiate if not
+- When recycling segment, deactivate child obstacles/pickups, return to pools
+- Avoid `Destroy()` during run (prevents GC spikes)
+
+### Scenes & Game Flow
+
+**Single Scene** (e.g., MainScene):
+- No scene switching; manage states in one scene
+- Contains:
+  - Manager objects (GameManager, ScoreManager, DifficultyController, AudioManager)
+  - Starting TrackSegment instances (or SegmentSpawner instantiates on StartRun)
+  - Player truck prefab (TruckPlayer.prefab) at start position
+  - Camera with RunnerCameraController
+  - UI Canvas with HUD, MainMenu, PauseMenu, GameOver (enable/disable as needed)
+
+**Game State Machine**:
+1. **Menu State (Idle)**:
+   - GameManager in `RunState.Menu`
+   - MainMenuUI active
+   - Game not running
+   
+2. **Starting a Run**:
+   - Player presses Play → `GameManager.StartRun()`
+   - Execute 9-step reset sequence (see GameManager.StartRun)
+   - Set `RunState.Running`, raise `OnRunStarted`
+   - Hide MainMenuUI, show HUD
+
+3. **Run State (Gameplay)**:
+   - DifficultyController evaluates curves using `elapsedRunTime`
+   - PlayerRunnerController moves at current speed (from DifficultyController)
+   - SegmentSpawner generates track, uses difficulty for obstacle/pickup density
+   - ScoreManager accumulates distance/score
+   - HUD updates via events
+
+4. **Game Over State**:
+   - Lives reach 0 → `GameManager.EndRun()`
+   - Set `RunState.GameOver`, raise `OnRunEnded`
+   - Update BestScore if needed
+   - Show GameOverUI with final stats
+   - Options: Retry (→ StartRun) or Main Menu (→ Menu state)
+
+5. **Pause State** (Optional):
+   - Pause button → `GameManager.PauseGame()`
+   - Set `RunState.Paused`, raise `OnPause`
+   - Show PauseMenuUI
+   - Resume button → `GameManager.ResumeGame()`
+
+**No Scene Reloading**: All transitions via enable/disable objects and resetting values.
+
+---
+
+## 5. RESPONSE FORMAT & OUTPUT REQUIREMENTS
+
+### A. Architecture Overview (First)
+
+Begin response with:
+```
+## Architecture Overview
+```
+
+**1. Script File Manifest**:
+- Bullet list of EVERY `.cs` file to be generated
+- Include approximate line count for each (must be ≤450)
+- If any script requires splitting, indicate how (e.g., "PlayerRunnerController split into: PlayerRunnerController.cs (~300 lines), PlayerCollisionHandler.cs (~150 lines)")
+- Example:
+  ```
+  - GameManager.cs (~250 lines)
+  - ScoreManager.cs (~200 lines)
+  - PlayerRunnerController.cs (~350 lines)
+  - PlayerCollisionHandler.cs (~120 lines)
+  - SegmentSpawner.cs (~400 lines)
+  - ...
+  ```
+
+**2. Interaction Summary**:
+- Brief bullet points describing how main classes interact
+- Example:
+  ```
+  - GameManager coordinates all systems via events (OnRunStarted, OnRunEnded)
+  - PlayerRunnerController subscribes to PlayerInputController events for movement
+  - ScoreManager receives updates from PlayerRunnerController (distance) and collisions (pickups/obstacles)
+  - SegmentSpawner queries DifficultyController for current spawn densities
+  - UI scripts subscribe to ScoreManager events to update displays
+  ```
+
+### B. Script Sections (After Overview)
+
+For each script:
+
+**1. Heading**:
+```markdown
+### Script: <FileName>.cs
+```
+
+**2. Code Block**:
+```csharp
+using System;
+using UnityEngine;
+// ... all necessary usings
+
+namespace TrashRunner.Core // or .Player, .Environment, etc.
+{
+    public class ClassName : MonoBehaviour
+    {
+        // Full implementation
+        // NO placeholders, pseudocode, or incomplete methods
+    }
+}
+```
+
+**3. Wiring in Unity**:
+After code block, provide:
+- Which GameObject/prefab to attach script to
+- Inspector assignments needed (references, fields)
+- Layer/tag setup if required
+- Example:
+  ```
+  **Wiring in Unity**:
+  - Attach `GameManager.cs` to an empty GameObject named "GameManager" in the scene
+  - Assign ScoreManager, DifficultyController, AudioManager references in Inspector
+  - Ensure GameObject persists if using DontDestroyOnLoad (optional for single scene)
+  ```
+
+### C. Splitting Strategy (If Needed)
+
+If any script approaches 450 lines, split BEFORE exceeding limit:
+
+**Priority for splitting**:
+1. Collision handling → separate class
+2. State management → separate class
+3. Object pooling per type → separate managers
+4. Input swipe detection → helper class
+5. UI panels → always separate
+
+**Module Communication**:
+- Main class holds references to helpers (assigned in Inspector)
+- Or helpers reference main class/shared managers
+- Document in Wiring section how split parts connect
+
+### D. Quality Requirements
+
+**Consistency**:
+- Use EXACT class names, event names, method signatures from this prompt
+- No renaming or inventing new ones unless necessary
+- All scripts must compile together in fresh Unity project
+- Include proper `using TrashRunner.X;` directives
+
+**Completeness**:
+- NO placeholders: `// TODO`, `...`, incomplete methods
+- Provide full logic for all described features
+- Simple implementations are fine, but must be functional
+- Example: Show actual code for life reduction, not just `// reduce lives`
+
+**No Meta Commentary**:
+- Present architecture and code directly
+- No apologies or AI limitation notes
+- Code comments for clarity only
+- Professional, focused tone
+
+**No External Dependencies**:
+- Only built-in Unity packages + Input System + URP (rendering only)
+- NO other packages or assets assumed
+- Define all helper types (enums, data classes) in provided scripts
+
+### E. Debugging Utilities (Optional)
+
+If space permits (after all required features):
+- `DebugManager.cs` (TrashRunner.Core, ~100 lines max)
+- Draw lane lines in Scene view (OnDrawGizmos)
+- Display current speed/difficulty (OnGUI or Debug.Log)
+- `[SerializeField] bool debugMode;` toggle
+- NOT required for game to function
+
+---
+
+## 6. FINAL CHECKLIST
+
+Before generating code, verify:
+
+✅ All scripts listed with line counts (each ≤450)
+✅ No single script exceeds 450 lines (splitting strategy applied if needed)
+✅ All event names/signatures match exactly (OnRunStarted, OnCoinsChanged, etc.)
+✅ All namespaces correct (TrashRunner.Core, .Player, .Environment, .UI, .Data)
+✅ ScriptableObjects have `[CreateAssetMenu]`, not loaded via Resources at runtime
+✅ UI scripts subscribe in OnEnable, unsubscribe in OnDisable
+✅ Player uses CharacterController (not Rigidbody)
+✅ Obstacles/Pickups have kinematic Rigidbody + trigger colliders
+✅ InputActionAsset referenced via serialized field (not loaded by path)
+✅ Swipe detection parameters included in PlayerInputController
+✅ DifficultyController uses elapsed run time (not distance) for curves
+✅ Distance calculated only in PlayerRunnerController
+✅ TrackSegment.Length property used by SegmentSpawner (no hard-coded spacing)
+✅ Object pools pre-initialized in SegmentSpawner Start/Awake
+✅ PlayerPrefs keys namespaced (e.g., "TrashRunner_BestScore")
+✅ AudioManager has two AudioSources (music, SFX) with methods per sound
+✅ GameManager.StartRun() follows 9-step reset sequence exactly
+✅ Obstacle/Pickup ApplyEffect checks null, applies effect once, recycles object
+
+---
+
+## NOW BEGIN YOUR RESPONSE
+
+Start with:
+```
+## Architecture Overview
+```
+
+Then provide all scripts following the format specified above.
