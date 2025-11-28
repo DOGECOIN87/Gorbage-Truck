@@ -1,4 +1,6 @@
 using UnityEngine;
+using TrashRunner.Environment;
+using TrashRunner.Player;
 
 namespace TrashRunner.Core
 {

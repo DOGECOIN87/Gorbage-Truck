@@ -84,7 +84,7 @@ namespace TrashRunner.Player
 
         private void Update()
         {
-            if (gameManager == null || gameManager.CurrentState != GameManager.RunState.Running)
+            if (gameManager == null || gameManager.CurrentState != RunState.Running)
                 return;
 
             // Calculate current speed from difficulty

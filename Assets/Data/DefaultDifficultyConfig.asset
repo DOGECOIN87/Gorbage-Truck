@@ -1,0 +1,59 @@
+fileFormatVersion: 2
+guid: fedcba0987654321fedcba0987654321
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56e52e39a7921926b980781bbd6af065, type: 3}
+  m_Name: DefaultDifficultyConfig
+  m_EditorClassIdentifier: 
+  speedOverTime:
+    serializedVersion: 3
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 5
+      inSlope: 0.08333334
+      outSlope: 0.08333334
+      tangentMode: 10
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 2
+      time: 60
+      value: 10
+      inSlope: 0.08333334
+      outSlope: 0.08333334
+      tangentMode: 10
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 2
+      time: 120
+      value: 15
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 10
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    preWrapMode: 0
+    postWrapMode: 0
+    rotationOrder: 4
+  obstacleDensityOverTime:
+    serializedVersion: 3
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.2
+      inSlope: 0.0033333335
+      outSlope: 0.0033333335
+      tangentMode: 10
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0

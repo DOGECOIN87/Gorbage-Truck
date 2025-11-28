@@ -102,7 +102,7 @@ namespace TrashRunner.Environment
             }
 
             // Initialize obstacle pools
-            foreach (var entry in spawnConfig.obstacleEntries)
+            foreach (var entry in spawnConfig.ObstacleEntries)
             {
                 if (entry.prefab != null && !objectPools.ContainsKey(entry.prefab))
                 {
@@ -119,7 +119,7 @@ namespace TrashRunner.Environment
             }
 
             // Initialize pickup pools
-            foreach (var entry in spawnConfig.pickupEntries)
+            foreach (var entry in spawnConfig.PickupEntries)
             {
                 if (entry.prefab != null && !objectPools.ContainsKey(entry.prefab))
                 {
@@ -199,7 +199,7 @@ namespace TrashRunner.Environment
                 // Check if we should spawn an obstacle based on density
                 if (Random.value < obstacleDensity)
                 {
-                    GameObject obstaclePrefab = SelectRandomPrefab(spawnConfig.obstacleEntries);
+                    GameObject obstaclePrefab = SelectRandomPrefab(spawnConfig.ObstacleEntries);
                     
                     if (obstaclePrefab != null)
                     {
@@ -217,7 +217,7 @@ namespace TrashRunner.Environment
                 // Otherwise, check if we should spawn a pickup
                 else if (Random.value < pickupDensity)
                 {
-                    GameObject pickupPrefab = SelectRandomPrefab(spawnConfig.pickupEntries);
+                    GameObject pickupPrefab = SelectRandomPrefab(spawnConfig.PickupEntries);
                     
                     if (pickupPrefab != null)
                     {
@@ -246,7 +246,7 @@ namespace TrashRunner.Environment
             float totalProbability = 0f;
             foreach (var entry in entries)
             {
-                totalProbability += entry.probability;
+                totalProbability += entry.spawnProbability;
             }
 
             float randomValue = Random.value * totalProbability;
@@ -254,7 +254,7 @@ namespace TrashRunner.Environment
 
             foreach (var entry in entries)
             {
-                currentSum += entry.probability;
+                currentSum += entry.spawnProbability;
                 if (randomValue <= currentSum)
                 {
                     return entry.prefab;

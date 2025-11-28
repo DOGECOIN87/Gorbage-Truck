@@ -1,0 +1,374 @@
+{
+  "Nodes": [
+    {
+      "Annotation": "all_tundra_nodes",
+      "DisplayName": null,
+      "Inputs": [],
+      "Outputs": [],
+      "ToBuildDependencies": [
+        1,
+        2,
+        3
+      ],
+      "OverwriteOutputs": false,
+      "DebugActionIndex": 0
+    },
+    {
+      "Annotation": "ScriptAssemblies",
+      "DisplayName": null,
+      "Inputs": [],
+      "Outputs": [],
+      "OverwriteOutputs": false,
+      "DebugActionIndex": 1
+    },
+    {
+      "Annotation": "BuildPlayerDataGenerator Library/BuildPlayerData/Editor/TypeDb-All.json",
+      "DisplayName": "BuildPlayerDataGenerator TypeDb-All",
+      "Action": "\"/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/netcorerun/netcorerun\" \"/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPlayerDataGenerator/BuildPlayerDataGenerator.exe\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Assembly-CSharp.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Purchasing.Common.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.AI.Navigation.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.InputSystem.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.InputSystem.ForUI.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.InputSystem.TestFramework.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Analytics.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Analytics.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Components.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Configuration.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Device.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Environments.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Environments.Internal.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Internal.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Networking.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Registration.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Scheduler.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Telemetry.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Services.Core.Threading.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.TextMeshPro.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/Unity.Timeline.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Advertisements.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.AppleCore.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.AppleMacosStub.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.AppleStub.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.Codeless.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.SecurityCore.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.SecurityStub.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.Stores.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.WinRTCore.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.Purchasing.WinRTStub.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.TestRunner.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.UI.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.analytics@3.8.1/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.analytics@3.8.1/Unity.Analytics.Editor.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.analytics@3.8.1/Unity.Analytics.Tracker.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll\" -a=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.nuget.newtonsoft-json@3.2.1/Runtime/Newtonsoft.Json.dll\" -s=\"/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Managed/UnityEngine\" -s=\"/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/NetStandard/compat/2.1.0/shims/netfx\" -s=\"/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard\" -s=\"/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/NetStandard/Extensions/2.0.0\" -s=\"/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/NetStandard/ref/2.1.0\" -s=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/ScriptAssemblies\" -s=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.analytics@3.8.1\" -s=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.analytics@3.8.1/AnalyticsStandardEvents\" -s=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom\" -s=\"/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/PackageCache/com.unity.nuget.newtonsoft-json@3.2.1/Runtime\" -o=\"Library/BuildPlayerData/Editor\" -rn=\"\" -tn=\"TypeDb-All.json\"",
+      "Inputs": [
+        "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/netcorerun/netcorerun",
+        "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPlayerDataGenerator/BuildPlayerDataGenerator.exe",
+        "Library/ScriptAssemblies/Assembly-CSharp.dll",
+        "Library/ScriptAssemblies/Purchasing.Common.dll",
+        "Library/ScriptAssemblies/Unity.AI.Navigation.dll",
+        "Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll",
+        "Library/ScriptAssemblies/Unity.InputSystem.dll",
+        "Library/ScriptAssemblies/Unity.InputSystem.ForUI.dll",
+        "Library/ScriptAssemblies/Unity.InputSystem.TestFramework.dll",
+        "Library/ScriptAssemblies/Unity.Services.Analytics.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Analytics.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Components.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Configuration.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Device.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Environments.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Environments.Internal.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Internal.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Networking.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Registration.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Scheduler.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Telemetry.dll",
+        "Library/ScriptAssemblies/Unity.Services.Core.Threading.dll",
+        "Library/ScriptAssemblies/Unity.TextMeshPro.dll",
+        "Library/ScriptAssemblies/Unity.Timeline.dll",
+        "Library/ScriptAssemblies/UnityEngine.Advertisements.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.AppleCore.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.AppleMacosStub.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.AppleStub.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.Codeless.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.SecurityCore.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.SecurityStub.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.Stores.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.WinRTCore.dll",
+        "Library/ScriptAssemblies/UnityEngine.Purchasing.WinRTStub.dll",
+        "Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll",
+        "Library/ScriptAssemblies/UnityEngine.TestRunner.dll",
+        "Library/ScriptAssemblies/UnityEngine.UI.dll",
+        "Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll",
+        "Library/PackageCache/com.unity.analytics@3.8.1/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll",
+        "Library/PackageCache/com.unity.analytics@3.8.1/Unity.Analytics.Editor.dll",
+        "Library/PackageCache/com.unity.analytics@3.8.1/Unity.Analytics.Tracker.dll",
+        "Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll",
+        "Library/PackageCache/com.unity.nuget.newtonsoft-json@3.2.1/Runtime/Newtonsoft.Json.dll"
+      ],
+      "Outputs": [
+        "Library/BuildPlayerData/Editor/TypeDb-All.json"
+      ],
+      "AllowUnexpectedOutput": true,
+      "Env": [],
+      "DebugActionIndex": 2
+    },
+    {
+      "Annotation": "ScriptAssembliesAndTypeDB",
+      "DisplayName": null,
+      "Inputs": [],
+      "Outputs": [],
+      "ToBuildDependencies": [
+        1,
+        2
+      ],
+      "OverwriteOutputs": false,
+      "DebugActionIndex": 3
+    }
+  ],
+  "FileSignatures": [
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.BuildTools.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.CSharpSupport.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.Core.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.DotNet.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.NativeProgramSupport.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.Stevedore.Program.exe"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.TinyProfiler2.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.Toolchain.GNU.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.Toolchain.LLVM.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.Toolchain.VisualStudio.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.Toolchain.Xcode.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.Tools.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.TundraBackend.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Bee.VisualStudioSolution.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/BeeBuildProgramCommon.Data.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/BeeBuildProgramCommon.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Newtonsoft.Json.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/NiceIO.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/PlayerBuildProgramLibrary.Data.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/PlayerBuildProgramLibrary.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/ScriptCompilationBuildProgram.Data.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/ScriptCompilationBuildProgram.exe"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/SharpYaml.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.Api.Attributes.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.Cecil.Mdb.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.Cecil.Pdb.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.Cecil.Rocks.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.Cecil.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.IL2CPP.Api.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.IL2CPP.Bee.BuildLogic.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.IL2CPP.Bee.IL2CPPExeCompileCppBuildProgram.Data.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.Linker.Api.dll"
+    },
+    {
+      "File": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline/Unity.Options.dll"
+    },
+    {
+      "File": "Library/Bee/2400b0aESkipCompile-inputdata.json"
+    }
+  ],
+  "StatSignatures": [
+    {
+      "File": "Assets/csc.rsp"
+    },
+    {
+      "File": "Assets/mcs.rsp"
+    },
+    {
+      "File": "Library/Bee/2400b0aESkipCompile-inputdata.json"
+    },
+    {
+      "File": "Library/PackageCache/com.unity.analytics@3.8.1/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll"
+    },
+    {
+      "File": "Library/PackageCache/com.unity.analytics@3.8.1/Unity.Analytics.Editor.dll"
+    },
+    {
+      "File": "Library/PackageCache/com.unity.analytics@3.8.1/Unity.Analytics.Tracker.dll"
+    },
+    {
+      "File": "Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll"
+    },
+    {
+      "File": "Library/PackageCache/com.unity.nuget.newtonsoft-json@3.2.1/Runtime/Newtonsoft.Json.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Assembly-CSharp.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Purchasing.Common.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.AI.Navigation.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.InputSystem.ForUI.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.InputSystem.TestFramework.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.InputSystem.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Analytics.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Analytics.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Components.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Configuration.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Device.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Environments.Internal.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Environments.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Internal.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Networking.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Registration.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Scheduler.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Telemetry.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.Threading.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Services.Core.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.TextMeshPro.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/Unity.Timeline.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Advertisements.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.AppleCore.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.AppleMacosStub.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.AppleStub.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.Codeless.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.SecurityCore.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.SecurityStub.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.Stores.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.WinRTCore.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.WinRTStub.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.Purchasing.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.TestRunner.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.UI.dll"
+    },
+    {
+      "File": "Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll"
+    }
+  ],
+  "GlobSignatures": [
+    {
+      "Path": "/home/mattrick/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/BuildPipeline"
+    }
+  ],
+  "ContentDigestExtensions": [
+    ".rsp",
+    ".dll",
+    ".exe",
+    ".csproj",
+    ".pdb"
+  ],
+  "StructuredLogFileName": "Library/Bee/tundra.log.json",
+  "StateFileName": "Library/Bee/TundraBuildState.state",
+  "StateFileNameTmp": "Library/Bee/TundraBuildState.state.tmp",
+  "StateFileNameMapped": "Library/Bee/TundraBuildState.state.map",
+  "ScanCacheFileName": "Library/Bee/tundra.scancache",
+  "ScanCacheFileNameTmp": "Library/Bee/tundra.scancache.tmp",
+  "DigestCacheFileName": "Library/Bee/tundra.digestcache",
+  "DigestCacheFileNameTmp": "Library/Bee/tundra.digestcache.tmp",
+  "CachedNodeOutputDirectoryName": "Library/Bee/CachedNodeOutput",
+  "EmitDataForBeeWhy": 0,
+        "NamedNodes": {
+          "all_tundra_nodes": 0,
+          "ScriptAssemblies": 1,
+          "ScriptAssembliesAndTypeDB": 3
+        }
+,  "DefaultNodes": [
+    0
+  ],
+  "SharedResources": [],
+  "Scanners": [],
+  "Identifier": "Library/Bee/2400b0aESkipCompile.dag.json",
+  "PayloadsFile": "/home/mattrick/Projects/Gorbage-Truck/Gorbage-Truck/Library/Bee/2400b0aESkipCompile.dag.payloads",
+  "RelativePathToRoot": "../.."
+}

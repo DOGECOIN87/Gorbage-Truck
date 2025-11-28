@@ -149,13 +149,13 @@ namespace TrashRunner.Player
 
                 switch (touch.phase)
                 {
-                    case TouchPhase.Began:
+                    case UnityEngine.TouchPhase.Began:
                         swipeStartPos = touch.position;
                         swipeStartTime = Time.time;
                         isSwipeInProgress = true;
                         break;
 
-                    case TouchPhase.Ended:
+                    case UnityEngine.TouchPhase.Ended:
                         if (isSwipeInProgress)
                         {
                             ProcessSwipe(touch.position);
@@ -163,7 +163,7 @@ namespace TrashRunner.Player
                         }
                         break;
 
-                    case TouchPhase.Canceled:
+                    case UnityEngine.TouchPhase.Canceled:
                         isSwipeInProgress = false;
                         break;
                 }

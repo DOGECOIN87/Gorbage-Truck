@@ -1,0 +1,150 @@
+
+docs.unity3d.com
+Manual
+Support
+Enter here to filter...
+Get started
+Install the Hub
+First-time users
+Profile
+Projects
+Editor downloads and installations
+Learn
+Community
+Settings
+Advanced Users
+Help
+Get startedInstall the Hub
+Install the Unity Hub
+System requirements
+The Unity Hub supports the following Operating Systems:
+
+Windows: 10 (21H1 and later, 64-bit versions), 11
+macOS: 12+
+Linux: Ubuntu 22.04, 24.04
+Note: Unity supports Apple Silicon machines (M1 machines), and you can install Apple Silicon Unity Editors through the Unity Hub. For more information, go to the Installing the Apple silicon Editor forum page. Additionally, Unity will no longer support Windows 7 after the 2023.1 release. Unity recommends upgrading to a supported operating system for the 2023.1 release.
+
+Use the installer
+To install the Unity Hub, do the following:
+
+Go to the Download Unity page on the Unity website.
+Select Download Unity Hub.
+Open the installer file.
+Follow the instructions in the Unity Hub setup window.
+When you install the Unity Hub for the first time, the Unity Hub runs and opens the welcome page. To use the Hub, sign in with your Unity ID. If you don’t have a Unity account, select Create Unity ID to create a new account.
+
+Note: When you launch the Unity Hub for the first timem it might requests access to some of your file system locations or to connect through the firewall. The Hub uses these permissions to access your local project files, Editor installations and fetch resources from cloud servers.
+
+Install an older version of Unity Hub
+If you require an older version of the Hub for compatibility reasons, you can download one of the following versions for your platform:
+
+Unity Hub 3.14.4
+Windows x64
+macOS
+Intel (x64)
+Apple Silicon (arm64)
+Linux
+RPM package
+DEB package
+Unity Hub 3.14.4 supports the following operating systems:
+
+Windows 10 (64-bit versions), 11
+macOS X 11+
+Ubuntu 24.04
+Unity Hub 3.12.1
+Windows x64
+macOS
+Intel (x64)
+Apple Silicon (arm64)
+Linux
+RPM package
+DEB package
+Unity Hub 3.12.1 supports the following operating systems:
+
+Windows 8, 10 (64-bit versions), 11
+macOS X 10.13+
+Ubuntu versions 20.04 and 22.04
+Note: Use the latest version of Unity Hub to ensure optimal performance, access the latest features, receive security updates, and maintain compatibility with the newest Unity Editor versions.
+
+Install the Unity Hub on Linux
+Debian or Ubuntu
+To install the Unity Hub on a Debian or Ubuntu Linux distribution, you need to add the Unity Hub Debian repository along with the public signing key to verify the integrity of the packages.
+
+To add the public signing key, run the following command:
+
+$ wget -qO - https://hub.unity3d.com/linux/keys/public | gpg --dearmor | sudo tee /usr/share/keyrings/Unity_Technologies_ApS.gpg > /dev/null
+To add the Unity Hub repository, you need an entry in /etc/apt/sources.list.d. Run the following command to add the Unity Hub repository:
+
+$ sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list'
+Update the package cache and install the package:
+
+$ sudo apt update
+$ sudo apt-get install unityhub
+**Note: For some systems, you may need to ensure the following:
+
+The directory /usr/share/keyrings exists.
+The user or group installing the Hub has write permissions to the /usr/share/keyrings directory.
+The user or group installing Hub has at least read permissions to the resulting file Unity_Technologies_ApS.gpg.**
+To remove the Unity Hub from the system, run the following command:
+
+$ sudo apt-get remove unityhub
+Red Hat Enterprise Linux (RHEL) or CentOS
+To install the Unity Hub on a RHEL or CentOS Linux distribution, you need to add the Unity Hub rpm repository to your known repositories list.
+
+To add the Unity Hub repository, you need an entry in /etc/yum.repos.d/. Run the following command to add the Unity Hub repository:
+
+$ sudo sh -c 'echo -e "[unityhub]\nname=Unity Hub\nbaseurl=https://hub.unity3d.com/linux/repos/rpm/stable\nenabled=1\ngpgcheck=1\ngpgkey=https://hub.unity3d.com/linux/repos/rpm/stable/repodata/repomd.xml.key\nrepo_gpgcheck=1" > /etc/yum.repos.d/unityhub.repo'
+Update the package cache and install the package using:
+
+$ sudo yum check-update
+$ sudo yum install unityhub
+To remove the Unity Hub from your system, run the following command:
+
+$ sudo yum remove unityhub
+Install the beta versions of the Unity Hub on Linux
+Debian or Ubuntu
+Unity distributes the Unity Hub beta versions for Linux through the same repository but under a different distribution.
+
+Before you begin, make sure you have added the public signing key already in your keychain (as explained above).
+
+To install the beta version, you need to add another repository entry in your /etc/apt/sources.list:
+
+$ sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb unstable main" > /etc/apt/sources.list.d/unityhub-beta.list'
+Update the package cache and install the package:
+
+$ sudo apt update
+$ sudo apt-get install unityhub=<version>
+Where <version> follows the format of 3.4.1-beta.1.
+
+Note: Only Unity Hub version 3 and higher are distributed through this mechanism.
+
+Red Hat Enterprise Linux (RHEL) or CentOS
+Unity distributes the Unity Hub beta versions for Linux through a different repository. You need to add the repository entry in your package manager.
+
+To add the Unity Hub repository, you need an entry in /etc/yum.repos.d/
+
+Run the following command to add the Unity Hub repository:
+
+$ sudo sh -c 'echo -e "[unityhub-beta]\nname=Unity Hub Beta\nbaseurl=https://hub.unity3d.com/linux/repos/rpm/unstable\nenabled=1\ngpgcheck=1\ngpgkey=https://hub.unity3d.com/linux/repos/rpm/unstable/repodata/repomd.xml.key\nrepo_gpgcheck=1" > /etc/yum.repos.d/unityhub_beta.repo'
+Update the package cache and install the package:
+
+$ sudo yum check-update
+$ sudo yum install unityhub
+Unity Hub updates
+To try beta versions of the Hub or switch from beta to a stable version of the Hub, follow the instructions in Advanced Settings.
+
+Additional resources
+Install and upgrade the Unity Editor
+Unity Support and Services
+Did you find this page useful? Please give it a rating:
+
+Report a problem on this page
+
+In This Article
+System requirements
+Use the installer
+Install an older version of Unity Hub
+Install the Unity Hub on Linux
+Install the beta versions of the Unity Hub on Linux
+Unity Hub updates
+Additional resources
